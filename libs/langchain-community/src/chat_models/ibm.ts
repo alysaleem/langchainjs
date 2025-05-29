@@ -141,12 +141,17 @@ function _convertToolToWatsonxTool(
     if ("type" in tool) {
       return tool as WatsonXAI.TextChatParameterTools;
     }
+    // Check if schema is a Zod schema or already a JSON schema
+    const parameters = isInteropZodSchema(tool.schema)
+      ? toJsonSchema(tool.schema)
+      : tool.schema;
+
     return {
       type: "function",
       function: {
         name: tool.name,
         description: tool.description ?? "Tool: " + tool.name,
-        parameters: toJsonSchema(tool.schema),
+        parameters,
       },
     };
   });
