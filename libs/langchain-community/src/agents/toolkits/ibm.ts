@@ -7,7 +7,7 @@ import {
   StructuredTool,
   StructuredToolInterface,
 } from "@langchain/core/tools";
-import { z } from "zod";
+import { InteropZodObject } from "@langchain/core/utils/types";
 import {
   authenticateAndSetInstance,
   jsonSchemaToZod,
@@ -29,9 +29,9 @@ export class WatsonxTool extends StructuredTool implements WatsonxToolParams {
 
   service: WatsonXAI;
 
-  schema: z.ZodObject<any>;
+  schema: InteropZodObject;
 
-  configSchema?: z.ZodObject<any>;
+  configSchema?: InteropZodObject;
 
   toolConfig?: Record<string, any>;
 
