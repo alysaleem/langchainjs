@@ -6,8 +6,8 @@ import { JsonOutputKeyToolsParserParams } from "@langchain/core/output_parsers/o
 import { ChatGeneration } from "@langchain/core/outputs";
 import { ToolCall } from "@langchain/core/messages/tool";
 import {
+  interopSafeParseAsync,
   InteropZodType,
-  getZodSafeParseIssues,
 } from "@langchain/core/utils/types";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -63,7 +63,10 @@ export class AnthropicToolsOutputParser<
     if (this.zodSchema === undefined) {
       return parsedResult as T;
     }
-    const zodParsedResult = await this.zodSchema.safeParseAsync(parsedResult);
+    const zodParsedResult = await interopSafeParseAsync(
+      this.zodSchema,
+      parsedResult
+    );
     if (zodParsedResult.success) {
       return zodParsedResult.data;
     } else {
@@ -72,7 +75,7 @@ export class AnthropicToolsOutputParser<
           result,
           null,
           2
-        )}". Error: ${JSON.stringify(getZodSafeParseIssues(zodParsedResult))}`,
+        )}". Error: ${JSON.stringify(zodParsedResult.error.issues)}`,
         JSON.stringify(parsedResult, null, 2)
       );
     }

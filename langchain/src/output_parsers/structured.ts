@@ -109,10 +109,10 @@ ${JSON.stringify(toJsonSchema(this.schema))}
       const json = text.includes("```")
         ? text.trim().split(/```(?:json)?/)[1]
         : text.trim();
-      return await interopParseAsync(JSON.parse(json), this.schema);
+      return await interopParseAsync(this.schema, JSON.parse(json));
     } catch (e) {
       try {
-        return await interopParseAsync(JSON.parse(text.trim()), this.schema);
+        return await interopParseAsync(this.schema, JSON.parse(text.trim()));
       } catch (e2) {
         throw new OutputParserException(
           `Failed to parse. Text: "${text}". Error: ${e2}`,

@@ -176,7 +176,7 @@ export class WatsonxToolsOutputParser<
           result,
           null,
           2
-        )}". Error: ${JSON.stringify(getZodSafeParseIssues(zodParsedResult))}`,
+        )}". Error: ${JSON.stringify(zodParsedResult.error.issues)}`,
         JSON.stringify(result, null, 2)
       );
     }
