@@ -1,4 +1,3 @@
-import { z } from "zod";
 import {
   BaseLLMOutputParser,
   OutputParserException,
@@ -6,6 +5,10 @@ import {
 import { JsonOutputKeyToolsParserParams } from "@langchain/core/output_parsers/openai_tools";
 import { ChatGeneration } from "@langchain/core/outputs";
 import { ToolCall } from "@langchain/core/messages/tool";
+import {
+  InteropZodType,
+  getZodSafeParseIssues,
+} from "@langchain/core/utils/types";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 interface AnthropicToolsOutputParserParams<T extends Record<string, any>>
@@ -29,7 +32,7 @@ export class AnthropicToolsOutputParser<
   /** Whether to return only the first tool call. */
   returnSingle = false;
 
-  zodSchema?: z.ZodType<T>;
+  zodSchema?: InteropZodType<T>;
 
   constructor(params: AnthropicToolsOutputParserParams<T>) {
     super(params);
@@ -69,7 +72,7 @@ export class AnthropicToolsOutputParser<
           result,
           null,
           2
-        )}". Error: ${JSON.stringify(zodParsedResult.error.errors)}`,
+        )}". Error: ${JSON.stringify(getZodSafeParseIssues(zodParsedResult))}`,
         JSON.stringify(parsedResult, null, 2)
       );
     }
